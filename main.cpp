@@ -1,37 +1,57 @@
 
-#include <iostream>
-#include <string>
 #include <array>
 #include <vector>
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <chrono>
+#include <thread>
 #include <fstream>
+#include <sstream>
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN "\x1b[32m"
+#define ANSI_COLOR_RESET "\x1b[0m"
 
 class User
 {
 public:
     std::string id_user = "";
-    std::array<int, 4> passWord = {0, 0, 0, 0};
+    std::string passWord = "";
     bool identification = false;
 
-    User(std::string _id_user, std::array<int, 4> _passWord) :
-        id_user(_id_user), passWord(_passWord) {}
+    User(std::string _id_user, std::string _passWord) : id_user(_id_user), passWord(_passWord) {}
 
     void new_user(std::string fichierTXT)
     {
+        std::string verifPassword = "";
         std::cout << "Entrer votre identifiant : " << std::endl;
         std::cin >> this->id_user;
-        std::cout << "Entrer votre mot de passe à 4 chiffres : " << std::endl;
-        for (int i = 0; i < 4; i++)
+        std::cout << "Entrer votre mot de passe : " << std::endl;
+        std::cin >> this->passWord;
+        std::cout << "Entrer votre mot de passe a nouveau : " << std::endl;
+        std::cin >> verifPassword;
+        if (this->passWord == verifPassword)
         {
-            std::cin >> this->passWord[i];
+            std::cout << ANSI_COLOR_GREEN << " Verification mot de passe good  " << std::endl;
+            std::cout << ANSI_COLOR_RESET << "" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
+        else
+        {
+            std::cout << ANSI_COLOR_RED << " Verification mot de passe erreur  " << std::endl;
+            std::cout << ANSI_COLOR_RESET << "" << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+
+        /// verification mot de passe A faire ici
 
         std::ofstream monFlux(fichierTXT, std::ios::app);
 
         if (monFlux)
         {
-            monFlux << "User ID: " << this->id_user << std::endl;
-            monFlux << "Password: " << this->passWord[0] << this->passWord[1] << this->passWord[2] << this->passWord[3] << std::endl;
-            std::cout << "L'utilisateur : " << id_user << " a bien été ajouté." << std::endl;
+            monFlux << this->id_user;
+            monFlux << "/" << this->passWord << std::endl;
+            std::cout << "L'utilisateur : " << id_user << " a bien ete ajoute." << std::endl;
         }
         else
         {
@@ -39,96 +59,76 @@ public:
         }
     }
 
-    bool user_identification(std::string &id, std::array<int, 4> &passWord)
+    bool user_identification(void)
     {
-        std::ifstream monFichier("C:/Users/Acer Nitro RTX/programation/projet/users.txt");
+        std::ifstream monFichier("users.txt");
 
         if (monFichier)
         {
             std::vector<std::string> lignes_id;
-            std::vector<std::array<int, 4>> lignes_mdp;
+            std::vector<std::string> lignes_mdp;
             std::string ligne;
-
+            size_t found;
             while (std::getline(monFichier, ligne))
             {
-                if (ligne.find("User ID:") )
-                {
-                    lignes_id.push_back(ligne.substr(9));
-                }
-                //else if (ligne.find("Password"))
-                //{
-                //    lignes_mdp.push_back(ligne.substr(9));
-                //}
-                else if (ligne.find("Password:"))
-                {
-                    std::array<int, 4> password;
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        monFichier >> password[i];
-                        lignes_mdp.push_back(password);
 
-                    }
-                }
+                found = ligne.find("/");
+                std::string user = ligne.substr(0, found);
+                std::string mdp = ligne.substr(found + 1);
+                lignes_mdp.push_back(mdp);
+                lignes_id.push_back(user);
             }
-
+            std::string password;
+            std::string id;
             std::cout << "Entrez votre ID : " << std::endl;
             std::cin >> id;
 
-            int id_index = -1;
-            for (int i = 0; i < lignes_id.size(); ++i)
+            std::cout << "Entrez votre mdp : " << std::endl;
+            std::cin >> password;
+
+            for (size_t i = 0; i < lignes_id.size(); ++i)
             {
-                if (lignes_id[i] == id)
+                if (lignes_id[i] == id && lignes_mdp[i] == password)
                 {
-                    id_index = i;
+                    return true;
                 }
             }
-
-            if (id_index == -1)
-            {
-                std::cerr << "ID non trouvé dans le fichier." << std::endl;
-                return false;
-            }
-            std::array<int, 4> password;
-            std::cout << "Entrez votre mdp : " << std::endl;
-            std::cin >> password[0]>> password[1]>> password[2]>> password[3];
-            if (passWord == lignes_mdp[id_index]) return true;
         }
         else
         {
             std::cerr << "Erreur d'ouverture du fichier." << std::endl;
-            return false;
         }
+        return false;
     }
 
-    ~User(){
+    ~User()
+    {
         std::cout << "Passage destructeur" << std::endl;
-
     }
-
 };
 
-
-
-
-int main(int argc, char **argv)
+int main(int /* argc */, char const * /* argv */[])
 {
-    User user("", {0, 0, 0, 0});
-    std::string nom_fichier = "C:/Users/Acer Nitro RTX/programation/projet/users.txt";
+    User user("", "");
+    std::string nom_fichier = "users.txt";
 
     int cas;
 
-    while(cas!=5){
-        std::cout << "Pour creer un compte, tapez 1" << std::endl;
-        std::cout << "Pour vous connecter, tapez 2" << std::endl;
-        std::cout << "Pour vous quitter, tapez 5" << std::endl;
+    while (cas != 3)
+    {
+        std::cout << "*************************************************************************************************************************" << std::endl;
+        std::cout << " 1. Inscription" << std::endl;
+        std::cout << " 2. Connexion" << std::endl;
+        std::cout << " 3. Quitter" << std::endl;
+        std::cout << "                                              Quelle choix voulez-vous faire :   " << std::endl;
         std::cin >> cas;
         switch (cas)
         {
         case 1:
             user.new_user(nom_fichier);
             break;
-        case 2:    
-            bool identification_result = user.user_identification(user.id_user, user.passWord);
+        case 2:
+            bool identification_result = user.user_identification();
             if (identification_result)
             {
                 std::cout << "Identification reussie !" << std::endl;
@@ -137,9 +137,12 @@ int main(int argc, char **argv)
             else
             {
                 std::cerr << "Erreur d'identification. Veuillez reessayer." << std::endl;
+                
             }
             break;
-        } groupe 6
-    }   
+        /*default:
+            std::cout << "Choix invalide" << std::endl;*/
+        }
+    }
     return 0;
 }

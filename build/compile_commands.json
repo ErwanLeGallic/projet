@@ -1,8 +1,0 @@
-[
-{
-  "directory": "C:/Users/sofia/Programmation/projet/build",
-  "command": "C:\\mingw64\\bin\\g++.exe   -g -o CMakeFiles\\projet.dir\\main.cpp.obj -c C:\\Users\\sofia\\Programmation\\projet\\main.cpp",
-  "file": "C:/Users/sofia/Programmation/projet/main.cpp",
-  "output": "CMakeFiles/projet.dir/main.cpp.obj"
-}
-]

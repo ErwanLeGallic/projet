@@ -51,23 +51,24 @@ public:
 
             while (std::getline(monFichier, ligne))
             {
-                if (ligne.find("User ID:") != std::string::npos)
+                if (ligne.find("User ID:") )
                 {
                     lignes_id.push_back(ligne.substr(9));
                 }
-                else if (ligne.find("Password") != std::string::npos)
+                //else if (ligne.find("Password"))
+                //{
+                //    lignes_mdp.push_back(ligne.substr(9));
+                //}
+                else if (ligne.find("Password:"))
                 {
-                    lignes_mdp.push_back(ligne.substr(9));
+                    std::array<int, 4> password;
+                    for (int i = 0; i < 4; ++i)
+                    {
+                        monFichier >> password[i];
+                        lignes_mdp.push_back(password);
+
+                    }
                 }
-                // else if (ligne.find("Password:") != std::string::npos)
-                // {
-                //     std::array<int, 4> password;
-                //     for (int i = 0; i < 4; ++i)
-                //     {
-                //         monFichier >> password[i];
-                //     }
-                //     lignes_mdp.push_back(password);
-                // }
             }
 
             std::cout << "Entrez votre ID : " << std::endl;
@@ -106,6 +107,9 @@ public:
 
 };
 
+
+
+
 int main(int argc, char **argv)
 {
     User user("", {0, 0, 0, 0});
@@ -128,15 +132,14 @@ int main(int argc, char **argv)
             if (identification_result)
             {
                 std::cout << "Identification reussie !" << std::endl;
+
             }
             else
             {
                 std::cerr << "Erreur d'identification. Veuillez reessayer." << std::endl;
             }
             break;
-        // default:
-        //     std::cout << "Choix invalide." << std::endl;
-        }
+        } groupe 6
     }   
     return 0;
 }

@@ -21,7 +21,7 @@ public:
 
     User(std::string _id_user, std::string _passWord) : id_user(_id_user), passWord(_passWord) {}
 
-    void new_user(std::string fichierTXT)
+    virtual void new_user(std::string fichierTXT)
     {
         std::string verifPassword = "";
         std::cout << "Entrer votre identifiant : " << std::endl;
@@ -42,8 +42,6 @@ public:
             std::cout << ANSI_COLOR_RESET << "" << std::endl;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
-
-        /// verification mot de passe A faire ici
 
         std::ofstream monFlux(fichierTXT, std::ios::app);
 
@@ -103,8 +101,83 @@ public:
 
     ~User()
     {
-        std::cout << "Passage destructeur" << std::endl;
+        std::cout << "Aurevoir"<< this->id_user << std::endl;
     }
+};
+
+class passwordManageur : private User
+{
+private:
+    std::string Majuscule = "AZERTYUIOPQSDFGHJKLMWXCVBN";
+    std::string Minuscule = "azertyuiopqsdfghjklmwxcvbn";
+    std::string Speciale = ",?;.:/!%^$*-/+";
+    std::string nombre="0123456789";
+    std::string motdepasse = "";
+    bool contientMajuscule = false;
+    bool contientMinuscule = false;
+    bool contientSpecial = false;
+    bool contientNombre = false;
+    int choixMaj;
+    int choixMin;
+    int choixSpe;
+    int choixNombre;
+
+public:
+bool verification(std::string _motdepasse){
+    for (char caractere : _motdepasse) {
+        if (Majuscule.find(caractere) >=1) {
+            contientMajuscule = true;
+        } else if (Minuscule.find(caractere)>=1) {
+            contientMinuscule = true;
+        } else if (Speciale.find(caractere) >=1) {
+            contientSpecial = true;
+        }else if(nombre.find(caractere)>=1){
+            contientNombre=true;
+        }
+    }
+    if (contientMajuscule==true && contientMinuscule==true && contientSpecial==true)
+    {
+        return true;
+    }
+    return false;
+}
+void generation(){
+    
+    std::cout<< "Combien de Nombre voulez vous : ";
+    std::cin>>this->choixNombre;
+    std::cout<<std::endl;
+    std::cout<< "Combien de Majuscule voulez vous : ";
+    std::cin>>this->choixMaj;
+    std::cout<<std::endl;
+    std::cout<< "Combien de Minuscule voulez vous : ";
+    std::cin>>this->choixMin;
+    std::cout<<std::endl;
+    std::cout<< "Combien de caractere speciale voulez vous : ";
+    std::cin>>this->choixSpe;
+    std::cout<<std::endl;
+    for( int i = 0; i < this->choixNombre; i++)
+    {
+        int index = rand() % nombre.size();
+        motdepasse += nombre[index];
+    }
+    for (int i = 0; i < this->choixMaj; i++)
+    {
+        int index = rand() % Majuscule.size();
+        motdepasse +=Majuscule[index];
+    }
+    for (int i = 0; i < this->choixMin; i++)
+    {
+        int index = rand() % Minuscule.size();
+        motdepasse+=Minuscule[index];
+    }
+    for (int i = 0; i < this->choixSpe; i++)
+    {
+        int index = rand() % Minuscule.size();
+        motdepasse+=Speciale[index];
+    }
+    std::cout<<"Votre mot de passe est "<<motdepasse<<std::endl;
+}
+
 };
 
 int main(int /* argc */, char const * /* argv */[])
@@ -116,6 +189,7 @@ int main(int /* argc */, char const * /* argv */[])
 
     while (cas != 3)
     {
+        system("cls");
         std::cout << "*************************************************************************************************************************" << std::endl;
         std::cout << " 1. Inscription" << std::endl;
         std::cout << " 2. Connexion" << std::endl;
@@ -129,19 +203,21 @@ int main(int /* argc */, char const * /* argv */[])
             break;
         case 2:
             bool identification_result = user.user_identification();
-            if (identification_result)
+            if (identification_result == true)
             {
-                std::cout << "Identification reussie !" << std::endl;
-
+                std::cout << ANSI_COLOR_GREEN << "Identification reussie !" << std::endl;
+                std::cout << ANSI_COLOR_RESET << "";
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
             else
             {
-                std::cerr << "Erreur d'identification. Veuillez reessayer." << std::endl;
-                
+                std::cout << ANSI_COLOR_RED << "Erreur d'identification. Veuillez reessayer." << std::endl;
+                std::cout << ANSI_COLOR_RESET << "";
+                std::this_thread::sleep_for(std::chrono::seconds(1));
             }
             break;
-        /*default:
-            std::cout << "Choix invalide" << std::endl;*/
+            /*default:
+                std::cout << "Choix invalide" << std::endl;*/
         }
     }
     return 0;

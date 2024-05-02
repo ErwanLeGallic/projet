@@ -1,0 +1,6 @@
+User ID: erwan
+Password: 1234
+User ID: pablo
+Password: 2222
+User ID: xavier
+Password: 0000

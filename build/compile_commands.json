@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/Acer Nitro RTX/programation/projet/build",
+  "command": "C:/ProgramData/chocolatey/bin/g++.exe   -g -o CMakeFiles/projet.dir/main.cpp.obj -c \"C:/Users/Acer Nitro RTX/programation/projet/main.cpp\"",
+  "file": "C:/Users/Acer Nitro RTX/programation/projet/main.cpp",
+  "output": "CMakeFiles/projet.dir/main.cpp.obj"
+}
+]

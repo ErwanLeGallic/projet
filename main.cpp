@@ -18,7 +18,7 @@ public:
     std::string passWord = "";
     bool identification = false;
 
-    User(std::string _id_user, std::string _passWord) : id_user(_id_user), passWord(_passWord) {};
+    User(std::string _id_user, std::string _passWord) : id_user(_id_user), passWord(_passWord){};
 
     virtual void new_user(std::string fichierTXT)
     {
@@ -121,7 +121,7 @@ public:
     passwordManageur(std::string _id_user, std::string _passWord, std::string _site) : User(_id_user, _passWord), site(_site){};
     std::string Majuscule = "AZERTYUIOPQSDFGHJKLMWXCVBN";
     std::string Minuscule = "azertyuiopqsdfghjklmwxcvbn";
-    std::string Speciale = ",?;.:/!%^$*-/+";
+    std::string Speciale = ",?;.:!%^$*-+";
     std::string nombre = "0123456789";
     bool verification(std::string _motdepasse)
     {
@@ -151,10 +151,10 @@ public:
         return false;
     }
 
-    void new_user(std::string fichierTXT) override
+    void new_user(std::string nomFichier) override
     {
         std::string ligne;
-        std::ofstream monFlux(fichierTXT, std::ios::app);
+        // std::ofstream fichier(fichierTXT, std::ios::app);
         system("cls");
         std::cout << "*************************************************************************************************************************" << std::endl;
         std::cout << " 1. Generer un mdp d'un site" << std::endl;
@@ -163,52 +163,60 @@ public:
         std::cout << "                                              Quelle choix voulez-vous faire :   " << std::endl;
         int cas2;
         std::cin >> cas2;
-        std::ifstream fichier(fichierTXT);
+        // std::ifstream fichier_lecture(fichierTXT);
+        nomFichier = id_user + std::string(".txt");
+        std::ofstream fichier_ecriture(nomFichier, std::ios::app);
+
         switch (cas2)
         {
         case 1:
             std::cout << " Pour quel site voulez vous generer un mot de passe ?" << std::endl;
             std::cin >> this->site;
-            size_t found;
-            while (getline(fichier, ligne))
+            if (fichier_ecriture)
             {
-                found = ligne.find(id_user);
-                
-            }
 
-            std::cout << "Combien de Nombre voulez vous : ";
-            std::cin >> this->choixNombre;
-            std::cout << std::endl;
-            std::cout << "Combien de Majuscule voulez vous : ";
-            std::cin >> this->choixMaj;
-            std::cout << std::endl;
-            std::cout << "Combien de Minuscule voulez vous : ";
-            std::cin >> this->choixMin;
-            std::cout << std::endl;
-            std::cout << "Combien de caractere speciale voulez vous : ";
-            std::cin >> this->choixSpe;
-            std::cout << std::endl;
-            for (int i = 0; i < this->choixNombre; i++)
-            {
-                int index = rand() % nombre.size();
-                motdepasse += nombre[index];
+                std::cout << "Combien de Nombre voulez vous : ";
+                std::cin >> this->choixNombre;
+                std::cout << std::endl;
+                std::cout << "Combien de Majuscule voulez vous : ";
+                std::cin >> this->choixMaj;
+                std::cout << std::endl;
+                std::cout << "Combien de Minuscule voulez vous : ";
+                std::cin >> this->choixMin;
+                std::cout << std::endl;
+                std::cout << "Combien de caractere speciale voulez vous : ";
+                std::cin >> this->choixSpe;
+                std::cout << std::endl;
+                for (int i = 0; i < this->choixNombre; i++)
+                {
+                    int index = rand() % nombre.size();
+                    motdepasse += nombre[index];
+                }
+                for (int i = 0; i < this->choixMaj; i++)
+                {
+                    int index = rand() % Majuscule.size();
+                    motdepasse += Majuscule[index];
+                }
+                for (int i = 0; i < this->choixMin; i++)
+                {
+                    int index = rand() % Minuscule.size();
+                    motdepasse += Minuscule[index];
+                }
+                for (int i = 0; i < this->choixSpe; i++)
+                {
+                    int index = rand() % Minuscule.size();
+                    motdepasse += Speciale[index];
+                }
+                std::cout << "Votre mot de passe est : " << motdepasse <<" /*  "<< id_user <<std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                fichier_ecriture << this->site;
+                fichier_ecriture << "/" << motdepasse << std::endl;
+                std::cout << "Le site : " << site << " a bien ete ajoute." << std::endl;
             }
-            for (int i = 0; i < this->choixMaj; i++)
+            else
             {
-                int index = rand() % Majuscule.size();
-                motdepasse += Majuscule[index];
+                std::cout << "Erreur fichier : " << std::endl;
             }
-            for (int i = 0; i < this->choixMin; i++)
-            {
-                int index = rand() % Minuscule.size();
-                motdepasse += Minuscule[index];
-            }
-            for (int i = 0; i < this->choixSpe; i++)
-            {
-                int index = rand() % Minuscule.size();
-                motdepasse += Speciale[index];
-            }
-            std::cout << "Votre mot de passe est : " << motdepasse << std::endl;
 
             break;
         case 2:
@@ -221,44 +229,49 @@ public:
     }
 };
 
-    int main(int /* argc */, char const * /* argv */[])
-    {
-        User user("", "");
-        std::string nom_fichier = "users.txt";
+int main(int /* argc */, char const * /* argv */[])
+{
+    User user("", "");
+    std::string nom_fichier = "users.txt";
+    std::string connexionFichier;
+    passwordManageur password("","","");
 
-        int cas;
-        while (cas != 3)
+    int cas;
+    while (cas != 3)
+    {
+        //system("cls");
+        printf("\e[1;1H\e[2J");
+        std::cout << "*************************************************************************************************************************" << std::endl;
+        std::cout << " 1. Inscription" << std::endl;
+        std::cout << " 2. Connexion" << std::endl;
+        std::cout << " 3. Quitter" << std::endl;
+        std::cout << "Quelle choix voulez-vous faire :" << std::endl<<std::flush;
+
+        std::cin >> cas;
+        switch (cas)
         {
-            system("cls");
-            std::cout << "*************************************************************************************************************************" << std::endl;
-            std::cout << " 1. Inscription" << std::endl;
-            std::cout << " 2. Connexion" << std::endl;
-            std::cout << " 3. Quitter" << std::endl;
-            std::cout << "                                              Quelle choix voulez-vous faire :   " << std::endl;
-            std::cin >> cas;
-            switch (cas)
+        case 1:
+            user.new_user(nom_fichier);
+            break;
+        case 2:
+            bool identification_result = user.user_identification();
+            if (identification_result == true)
             {
-            case 1:
-                user.new_user(nom_fichier);
-                break;
-            case 2:
-                bool identification_result = user.user_identification();
-                if (identification_result == true)
-                {
-                    std::cout << ANSI_COLOR_GREEN << "Identification reussie !" << std::endl;
-                    std::cout << ANSI_COLOR_RESET << "";
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                else
-                {
-                    std::cout << ANSI_COLOR_RED << "Erreur d'identification. Veuillez reessayer." << std::endl;
-                    std::cout << ANSI_COLOR_RESET << "";
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                break;
-                /*default:
-                    std::cout << "Choix invalide" << std::endl;*/
+                std::cout << ANSI_COLOR_GREEN << "Identification reussie !" << std::endl;
+                std::cout << ANSI_COLOR_RESET << "";
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+                password.new_user(connexionFichier);
             }
+            else
+            {
+                std::cout << ANSI_COLOR_RED << "Erreur d'identification. Veuillez reessayer." << std::endl;
+                std::cout << ANSI_COLOR_RESET << "";
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+            break;
+            /*default:
+                std::cout << "Choix invalide" << std::endl;*/
         }
-        return 0;
     }
+    return 0;
+}

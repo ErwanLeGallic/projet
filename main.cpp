@@ -124,6 +124,7 @@ public:
     std::string Minuscule = "abcdefghijklmnopqrstuvwxyz";
     std::string Speciale = ",?;.:!%^$*-+~#'({@})";
     std::string nombre = "0123456789";
+
     bool verification(std::string _motdepasse)
     {
         for (char caractere : _motdepasse)

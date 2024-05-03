@@ -18,8 +18,8 @@ public:
     std::string id_user = "";
     std::string passWord = "";
     bool identification = false;
-    User(std::string _id_user, std::string _passWord);
     virtual void new_user(std::string fichierTXT);
     bool user_identification(void);
     ~User();
+    User(std::string _id_user, std::string _passWord);
 };

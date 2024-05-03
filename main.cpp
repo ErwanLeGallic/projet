@@ -12,7 +12,6 @@
 #define ANSI_COLOR_RESET "\x1b[0m"
 #include "User/PasswordManageur/PasswordManageur.hpp"
 
-
 int main(int /* argc */, char const * /* argv */[])
 {
     User user("", "");
@@ -54,8 +53,7 @@ int main(int /* argc */, char const * /* argv */[])
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
             break;
-            /*default:
-                std::cout << "Choix invalide" << std::endl;*/
+        /**/
         }
     }
     return 0;

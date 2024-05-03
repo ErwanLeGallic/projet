@@ -65,6 +65,9 @@ void passwordManageur::new_user(std::string nomFichier)
                         int index = rand() % Speciale.size();
                         motdepasse += Speciale[index];
                     }
+
+                    /* melange le password*/
+                    std::shuffle(motdepasse.begin(), motdepasse.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
                     std::cout << "Votre mot de passe est : " << motdepasse << std::endl
                               << std::endl;
                     std::this_thread::sleep_for(std::chrono::seconds(5));

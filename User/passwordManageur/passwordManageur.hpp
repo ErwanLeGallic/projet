@@ -7,13 +7,14 @@
 #include <thread>
 #include <fstream>
 #include <sstream>
+#include <algorithm> // pour std::shuffle
+#include <random> 
 #define ANSI_COLOR_RED "\x1b[31m"
 #define ANSI_COLOR_GREEN "\x1b[32m"
 #define ANSI_COLOR_RESET "\x1b[0m"
 #include "../User.hpp"
 
-
-class passwordManageur : private User
+class passwordManageur : public User
 {
 private:
     std::string site;

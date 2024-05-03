@@ -7,10 +7,10 @@ void passwordManageur::new_user(std::string nomFichier)
     {
         std::string ligne;
         int cas2;
-        // std::ofstream fichier(fichierTXT, std::ios::app);        
-        // std::ifstream fichier_lecture(fichierTXT);
+        std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
+        
         nomFichier = this->id_user + ".txt";
-        // std::ofstream fichier_ecriture(nomFichier, std::ios::app);
+       
         while (cas2 != 3)
         {
             printf("\e[1;1H\e[2J");
@@ -47,27 +47,27 @@ void passwordManageur::new_user(std::string nomFichier)
                     std::cout << std::endl;
                     for (int i = 0; i < this->choixNombre; i++)
                     {
-                        int index = rand() % nombre.size();
+                        int index = generator() % nombre.size();
                         motdepasse += nombre[index];
                     }
                     for (int i = 0; i < this->choixMaj; i++)
                     {
-                        int index = rand() % Majuscule.size();
+                        int index = generator() % Majuscule.size();
                         motdepasse += Majuscule[index];
                     }
                     for (int i = 0; i < this->choixMin; i++)
                     {
-                        int index = rand() % Minuscule.size();
+                        int index = generator() % Minuscule.size();
                         motdepasse += Minuscule[index];
                     }
                     for (int i = 0; i < this->choixSpe; i++)
                     {
-                        int index = rand() % Speciale.size();
+                        int index = generator() % Speciale.size();
                         motdepasse += Speciale[index];
                     }
 
                     /* melange le password*/
-                    std::shuffle(motdepasse.begin(), motdepasse.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
+                    std::shuffle(motdepasse.begin(), motdepasse.end(),generator);
                     std::cout << "Votre mot de passe est : " << motdepasse << std::endl
                               << std::endl;
                     std::this_thread::sleep_for(std::chrono::seconds(5));

@@ -176,7 +176,7 @@ public:
             {
                 printf("\e[1;1H\e[2J");
                 std::ofstream fichier_ecriture(nomFichier, std::ios::app);
-
+                std::string motdepasse = "";
                 std::cout << " Pour quel site voulez vous generer un mot de passe ?" << std::endl;
                 std::cin >> this->site;
                 if (fichier_ecriture)
@@ -214,8 +214,7 @@ public:
                         int index = rand() % Speciale.size();
                         motdepasse += Speciale[index];
                     }
-                    std::cout << "Votre mot de passe est : " << motdepasse << std::endl
-                              << std::endl;
+                    std::cout << "Votre mot de passe est : " << motdepasse << std::endl<< std::endl;
                     std::this_thread::sleep_for(std::chrono::seconds(5));
                     fichier_ecriture << this->site;
                     fichier_ecriture << "/" << motdepasse << std::endl;

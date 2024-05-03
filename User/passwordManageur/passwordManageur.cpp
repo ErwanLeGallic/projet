@@ -7,14 +7,7 @@ void passwordManageur::new_user(std::string nomFichier)
     {
         std::string ligne;
         int cas2;
-<<<<<<< HEAD
-        std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
-        
-        nomFichier = this->id_user + ".txt";
-       
-=======
         nomFichier = this->id_user + ".txt";//on cree un fichier propre à chaque user qui sera l'equivalent de sa base de donnee
->>>>>>> 73e9eda620d1639420baec68c8665dea1d468bb2
         while (cas2 != 3)
         {
             printf("\e[1;1H\e[2J");//permet de clean le terminal
@@ -53,37 +46,29 @@ void passwordManageur::new_user(std::string nomFichier)
                     //on fait choisir un char aleatoire avec la fonction rand()
                     for (int i = 0; i < this->choixNombre; i++)
                     {
-                        int index = generator() % nombre.size();
+                        int index = rand() % nombre.size();
                         motdepasse += nombre[index];
                     }
                     for (int i = 0; i < this->choixMaj; i++)
                     {
-                        int index = generator() % Majuscule.size();
+                        int index = rand() % Majuscule.size();
                         motdepasse += Majuscule[index];
                     }
                     for (int i = 0; i < this->choixMin; i++)
                     {
-                        int index = generator() % Minuscule.size();
+                        int index = rand() % Minuscule.size();
                         motdepasse += Minuscule[index];
                     }
                     for (int i = 0; i < this->choixSpe; i++)
                     {
-                        int index = generator() % Speciale.size();
+                        int index = rand() % Speciale.size();
                         motdepasse += Speciale[index];
                     }
 
-<<<<<<< HEAD
-                    /* melange le password*/
-                    std::shuffle(motdepasse.begin(), motdepasse.end(),generator);
-                    std::cout << "Votre mot de passe est : " << motdepasse << std::endl
-                              << std::endl;
-                    std::this_thread::sleep_for(std::chrono::seconds(5));
-=======
                     //on fait melanger le password car pour l'instant ils sont dans l'ordre des attributs
                     std::shuffle(motdepasse.begin(), motdepasse.end(), std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count()));
                     std::cout << "Votre mot de passe est : " << motdepasse << std::endl<< std::endl;
                     std::this_thread::sleep_for(std::chrono::seconds(5));//Delay de 5 seconde
->>>>>>> 73e9eda620d1639420baec68c8665dea1d468bb2
                     fichier_ecriture << this->site;
                     fichier_ecriture << "/" << motdepasse << std::endl;
                     std::cout << this->id_user << " Le site : " << site << " a bien ete ajoute." << std::endl;
